@@ -6,6 +6,7 @@ import {useTheme} from 'react-native-paper';
 import DrawerView from './DrawerView';
 import TabNavigator from './TabNavigator';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import DetailScreen from '../screens/DetailScreen';
 
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
@@ -27,10 +28,12 @@ const DrawerNavigator = () => {
       <Drawer.Screen name="AppBottomStack" component={TabNavigator} />
       <Drawer.Screen
         name="Detail"
-        component={Detail}
-        options={({ navigation }) => ({
+        component={DetailScreen}
+        options={({navigation}) => ({
           headerLeft: ({tintColor}) => (
-            <TouchableOpacity style={{ marginLeft: 6, padding: 8 }} onPress={() => navigation.goBack() }>
+            <TouchableOpacity
+              style={{marginLeft: 6, padding: 8}}
+              onPress={() => navigation.goBack()}>
               <Icon name="arrow-left" size={20} color={tintColor} />
             </TouchableOpacity>
           ),
@@ -59,10 +62,12 @@ const DrawerNavigator = () => {
 //   );
 // };
 
-function Detail() {
+function Detail({route, navigation}) {
+  const {id} = route?.params ?? {};
   return (
     <View style={{flex: 1}}>
       <Text style={{color: 'white'}}>hello</Text>
+      <Text style={{color: 'white'}}>{id}</Text>
     </View>
   );
 }
