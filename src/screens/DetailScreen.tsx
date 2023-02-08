@@ -1,6 +1,6 @@
 import {useQuery} from '@tanstack/react-query';
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import {Image, StyleSheet, View, Text as RNText} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {Button, Card, Divider, Text, useTheme} from 'react-native-paper';
 import Loading from '../components/Loading';
@@ -33,7 +33,7 @@ const DetailScreen = ({route, navigation}: Props) => {
     );
   }
 
-  if (isLoading) {
+  if (isLoading || isFetching) {
     return (
       <View
         style={{alignItems: 'center', flexGrow: 1, justifyContent: 'center'}}>
@@ -45,32 +45,51 @@ const DetailScreen = ({route, navigation}: Props) => {
   return (
     <View
       style={{
-        marginTop: -10,
         flexGrow: 1,
+        height: '100%',
         backgroundColor: theme.colors.surface,
       }}>
       {imageUrl && (
-        <Card.Cover
-          source={{uri: imageUrl}}
-          style={{borderBottomStartRadius: 0, borderBottomEndRadius: 0}}
-        />
+        <Image source={{uri: imageUrl}} style={{width: '100%', height: 200}} />
       )}
-      <Card.Title
+      {/* <Card.Title
         title={`${animeData.title} (${animeData.year})`}
         subtitle={`Score: ${animeData.score}/10`}
-      />
-      <ScrollView contentContainerStyle={{flexGrow: 1}}>
-        <Card.Content style={{ flexGrow: 1, backgroundColor: theme.colors.backdrop, paddingVertical: 10 }}>
-          <Text variant="bodySmall">Rating: {animeData.rating}</Text>
-          <View style={{height: 20}} />
-          <Text variant="bodyMedium" style={{ flexGrow: 1 }}>{animeData?.synopsis}</Text>
-          <View style={{height: 300}} />
-        </Card.Content>
+      /> */}
+      <View style={{paddingVertical: 20, paddingHorizontal: 15}}>
+        <Text variant="headlineSmall">
+          {animeData.title} ({animeData.year})
+        </Text>
+        <Text variant="labelLarge" style={{ marginTop: 10 }}>
+          {animeData.score ? `Score: ${animeData.score}/10` : 'Score: -'}
+        </Text>
+        <View style={{height: 10}} />
+        <Text variant="labelMedium">Rating: {animeData.rating}</Text>
+      </View>
+      <ScrollView
+        contentContainerStyle={{
+          flexGrow: 1,
+          backgroundColor: theme.colors.backdrop,
+          paddingVertical: 10,
+          paddingHorizontal: 15,
+        }}>
+        <Text variant="titleMedium">Synopsis</Text>
+        <View style={{height: 10}} />
+        <Text variant="bodyMedium">{animeData?.synopsis || '-'}</Text>
       </ScrollView>
-      
-      {/* <View style={{ marginHorizontal: 30 }}> */}
-      <Button>Mark as Favorite</Button>
-      {/* </View> */}
+      <View
+        style={{
+          marginHorizontal: 10,
+          marginVertical: 20,
+          backgroundColor: theme.colors.backdrop,
+        }}>
+        <Button
+          icon="heart"
+          mode="contained"
+          onPress={() => console.log('Pressed')}>
+          Mark As Favorite
+        </Button>
+      </View>
     </View>
   );
 };

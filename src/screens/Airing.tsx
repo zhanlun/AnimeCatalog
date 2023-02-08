@@ -1,7 +1,7 @@
 import {useQuery} from '@tanstack/react-query';
 import {isEmpty} from 'lodash';
 import React, {useEffect, useRef, useState} from 'react';
-import {FlatList, StyleSheet, View} from 'react-native';
+import {FlatList, ScrollView, StyleSheet, View} from 'react-native';
 import {
   Card,
   Searchbar,
@@ -57,7 +57,7 @@ const Airing = ({navigation}: Props) => {
         )}
         <Card.Title
           title={`${item.title} (${item.year})`}
-          subtitle={`Score: ${item.score}/10`}
+          subtitle={item.score ? `Score: ${item.score}/10` : 'Score: -'}
         />
         <Card.Content>
           <Text variant="bodySmall">Rating: {item.rating}</Text>
@@ -83,6 +83,7 @@ const Airing = ({navigation}: Props) => {
     );
   }
 
+  const isFetchingOrLoading = isLoading || isFetching;
   return (
     <View
       style={[styles.container, {backgroundColor: theme.colors.background}]}>
@@ -92,12 +93,13 @@ const Airing = ({navigation}: Props) => {
         value={searchQuery}
       />
 
-      {isLoading && (
-        <View style={{paddingVertical: 15, paddingHorizontal: 15}}>
+      {isFetchingOrLoading && (
+        <ScrollView
+          style={{paddingVertical: 15, paddingHorizontal: 15, flexGrow: 1}}>
           <AnimeListEmptySkeleton />
-        </View>
+        </ScrollView>
       )}
-      {!isLoading && isEmpty(animeList) && (
+      {!isFetchingOrLoading && isEmpty(animeList) && (
         <View
           style={{
             alignItems: 'center',
@@ -109,38 +111,33 @@ const Airing = ({navigation}: Props) => {
           </Text>
         </View>
       )}
-      {!isLoading && !isEmpty(animeList) && (
+      {!isFetchingOrLoading && !isEmpty(animeList) && (
         <FlatList
           ref={flatListRef}
           style={{paddingVertical: 15, paddingHorizontal: 15}}
           data={animeList}
           renderItem={renderItem}
-          ListFooterComponentStyle={{
-            marginBottom: 20,
-          }}
-          ListFooterComponent={
-            <SegmentedButtons
-              style={{marginVertical: 15}}
-              value=""
-              onValueChange={() => {}}
-              buttons={[
-                {
-                  value: 'prev',
-                  label: 'Previous',
-                  disabled: page === 1,
-                  onPress: () => setPage(prev => Math.max(prev - 1, 1)),
-                },
-                {
-                  value: 'next',
-                  label: 'Next',
-                  disabled: !hasNextPage,
-                  onPress: () => setPage(prev => Math.min(prev + 1, lastPage)),
-                },
-              ]}
-            />
-          }
         />
       )}
+      <SegmentedButtons
+        style={{marginVertical: 15, paddingHorizontal: 15}}
+        value=""
+        onValueChange={() => {}}
+        buttons={[
+          {
+            value: 'prev',
+            label: 'Previous',
+            disabled: page === 1 || isFetchingOrLoading,
+            onPress: () => setPage(prev => Math.max(prev - 1, 1)),
+          },
+          {
+            value: 'next',
+            label: 'Next',
+            disabled: !hasNextPage || isFetchingOrLoading,
+            onPress: () => setPage(prev => Math.min(prev + 1, lastPage)),
+          },
+        ]}
+      />
     </View>
   );
 };
@@ -150,5 +147,6 @@ export default Airing;
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
+    height: '100%',
   },
 });
