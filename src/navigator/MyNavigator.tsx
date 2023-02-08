@@ -1,15 +1,13 @@
 import {createDrawerNavigator} from '@react-navigation/drawer';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
-import {Text, View, TouchableOpacity} from 'react-native';
+import {TouchableOpacity} from 'react-native';
 import {useTheme} from 'react-native-paper';
-import DrawerView from './DrawerView';
-import TabNavigator from './TabNavigator';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import DetailScreen from '../screens/DetailScreen';
+import DrawerView from './DrawerView';
+import TabNavigator from './TabNavigator';
 
 const Drawer = createDrawerNavigator();
-const Stack = createNativeStackNavigator();
 
 const DrawerNavigator = () => {
   const theme = useTheme();
@@ -30,6 +28,7 @@ const DrawerNavigator = () => {
         name="Detail"
         component={DetailScreen}
         options={({navigation}) => ({
+          // eslint-disable-next-line react/no-unstable-nested-components
           headerLeft: ({tintColor}) => (
             <TouchableOpacity
               style={{marginLeft: 6, padding: 8}}
@@ -42,34 +41,5 @@ const DrawerNavigator = () => {
     </Drawer.Navigator>
   );
 };
-
-// const MyNavigator = () => {
-//   const theme = useTheme();
-
-//   return (
-//     <Stack.Navigator
-//       initialRouteName="HomeDrawer"
-//       screenOptions={{
-//         headerTitle: 'AnimeCatalog',
-//         headerTitleAlign: 'center',
-//         headerTintColor: theme.colors.inverseSurface,
-//         presentation: 'transparentModal',
-//         contentStyle: {backgroundColor: theme.colors.surface},
-//       }}>
-//       <Stack.Screen name="HomeDrawer" component={DrawerNavigator} />
-//       <Stack.Screen name="Detail" component={Detail} />
-//     </Stack.Navigator>
-//   );
-// };
-
-function Detail({route, navigation}) {
-  const {id} = route?.params ?? {};
-  return (
-    <View style={{flex: 1}}>
-      <Text style={{color: 'white'}}>hello</Text>
-      <Text style={{color: 'white'}}>{id}</Text>
-    </View>
-  );
-}
 
 export default DrawerNavigator;

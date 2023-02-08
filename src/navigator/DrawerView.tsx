@@ -1,12 +1,10 @@
-import { useAtomValue } from 'jotai/react';
-import React, { useMemo } from 'react';
-import { Drawer, useTheme } from 'react-native-paper';
-import { favoritesAtom } from '../atoms/favorites';
-import { selectedAnimeIdAtom } from '../atoms/selectedAnime';
+import {useAtomValue} from 'jotai/react';
+import React, {useMemo} from 'react';
+import {Drawer} from 'react-native-paper';
+import {favoritesAtom} from '../atoms/favorites';
+import {selectedAnimeIdAtom} from '../atoms/selectedAnime';
 
-function DrawerView({navigation, ...props}) {
-  const theme = useTheme();
-
+function DrawerView({navigation}) {
   const favoriteIdMap = useAtomValue(favoritesAtom);
   const favoriteAnimeList = useMemo(() => {
     return Object.entries(favoriteIdMap)

@@ -1,9 +1,9 @@
 import {useQuery} from '@tanstack/react-query';
 import {useSetAtom} from 'jotai';
 import React, {useEffect} from 'react';
-import {Image, StyleSheet, View, Text as RNText} from 'react-native';
+import {Image, StyleSheet, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {Button, Card, Divider, Text, useTheme} from 'react-native-paper';
+import {Button, Text, useTheme} from 'react-native-paper';
 import {selectedAnimeIdAtom} from '../atoms/selectedAnime';
 import Loading from '../components/Loading';
 import useFavoriteAnime from '../hooks/useFavoriteAnime.hook';
@@ -35,8 +35,7 @@ const DetailScreen = ({route, navigation}: Props) => {
 
   if (isError) {
     return (
-      <View
-        style={{alignItems: 'center', flexGrow: 1, justifyContent: 'center'}}>
+      <View style={styles.errorContainer}>
         <Text variant="bodySmall">
           An error occurred. Please try again later.
         </Text>
@@ -46,8 +45,7 @@ const DetailScreen = ({route, navigation}: Props) => {
 
   if (isLoading || isFetching) {
     return (
-      <View
-        style={{alignItems: 'center', flexGrow: 1, justifyContent: 'center'}}>
+      <View style={styles.loadingContainer}>
         <Loading />
       </View>
     );
@@ -55,15 +53,9 @@ const DetailScreen = ({route, navigation}: Props) => {
 
   return (
     <View
-      style={{
-        flexGrow: 1,
-        height: '100%',
-        backgroundColor: theme.colors.surface,
-      }}>
-      {imageUrl && (
-        <Image source={{uri: imageUrl}} style={{width: '100%', height: 200}} />
-      )}
-      <View style={{paddingVertical: 20, paddingHorizontal: 15}}>
+      style={[styles.mainContainer, {backgroundColor: theme.colors.surface}]}>
+      {imageUrl && <Image source={{uri: imageUrl}} style={styles.image} />}
+      <View style={styles.headerContainer}>
         <Text variant="headlineSmall">
           {animeData.title} {animeData.year ? `(${animeData.year})` : ''}
         </Text>
@@ -74,22 +66,15 @@ const DetailScreen = ({route, navigation}: Props) => {
         <Text variant="labelMedium">Rating: {animeData.rating}</Text>
       </View>
       <ScrollView
-        contentContainerStyle={{
-          flexGrow: 1,
-          backgroundColor: theme.colors.backdrop,
-          paddingVertical: 10,
-          paddingHorizontal: 15,
-        }}>
+        contentContainerStyle={[
+          styles.scrollContentContainer,
+          {backgroundColor: theme.colors.backdrop},
+        ]}>
         <Text variant="titleMedium">Synopsis</Text>
         <View style={{height: 10}} />
         <Text variant="bodyMedium">{animeData?.synopsis || '-'}</Text>
       </ScrollView>
-      <View
-        style={{
-          marginHorizontal: 10,
-          marginVertical: 20,
-          backgroundColor: theme.colors.backdrop,
-        }}>
+      <View style={styles.buttonContainer}>
         {!isFavorite ? (
           <Button
             icon="heart"
@@ -112,4 +97,26 @@ const DetailScreen = ({route, navigation}: Props) => {
 
 export default DetailScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  errorContainer: {alignItems: 'center', flexGrow: 1, justifyContent: 'center'},
+  loadingContainer: {
+    alignItems: 'center',
+    flexGrow: 1,
+    justifyContent: 'center',
+  },
+  mainContainer: {
+    flexGrow: 1,
+    height: '100%',
+  },
+  image: {width: '100%', height: 200},
+  headerContainer: {paddingVertical: 20, paddingHorizontal: 15},
+  scrollContentContainer: {
+    flexGrow: 1,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+  },
+  buttonContainer: {
+    marginHorizontal: 10,
+    marginVertical: 20,
+  },
+});
