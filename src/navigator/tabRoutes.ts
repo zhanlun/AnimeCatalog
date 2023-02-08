@@ -1,24 +1,25 @@
-import Airing from '../screens/Airing';
-import Complete from '../screens/Complete';
-import Upcoming from '../screens/Upcoming';
+import AnimeList from '../screens/AnimeList';
 
 const routes = [
   {
     name: 'Complete',
     label: 'Complete',
-    component: Complete,
+    animeStatus: 'complete',
+    component: AnimeList,
     icon: 'calendar-check',
   },
   {
     name: 'Airing',
     label: 'Airing',
-    component: Airing,
+    animeStatus: 'airing',
+    component: AnimeList,
     icon: 'television-play',
   },
   {
     name: 'Upcoming',
     label: 'Upcoming',
-    component: Upcoming,
+    animeStatus: 'upcoming',
+    component: AnimeList,
     icon: 'timer-sand',
   },
 ];

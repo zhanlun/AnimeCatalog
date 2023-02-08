@@ -1,22 +1,21 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
-  NavigationContainer,
-  DefaultTheme as NavigationDefaultTheme,
   DarkTheme as NavigationDarkTheme,
+  DefaultTheme as NavigationDefaultTheme,
+  NavigationContainer,
 } from '@react-navigation/native';
+import {createAsyncStoragePersister} from '@tanstack/query-async-storage-persister';
+import {QueryClient} from '@tanstack/react-query';
+import {PersistQueryClientProvider} from '@tanstack/react-query-persist-client';
+import merge from 'deepmerge';
 import React from 'react';
 import {
-  Provider as PaperProvider,
   adaptNavigationTheme,
-  MD3LightTheme,
   MD3DarkTheme,
+  MD3LightTheme,
+  Provider as PaperProvider,
 } from 'react-native-paper';
 import MyNavigator from './src/navigator/MyNavigator';
-import merge from 'deepmerge';
-import {
-  QueryClient,
-  QueryClientProvider,
-  useQuery,
-} from '@tanstack/react-query';
 
 const {LightTheme, DarkTheme} = adaptNavigationTheme({
   reactNavigationLight: NavigationDefaultTheme,
@@ -97,15 +96,21 @@ const queryClient = new QueryClient({
   },
 });
 
+const asyncStoragePersister = createAsyncStoragePersister({
+  storage: AsyncStorage,
+});
+
 function App(): JSX.Element {
   return (
-    <QueryClientProvider client={queryClient}>
+    <PersistQueryClientProvider
+      client={queryClient}
+      persistOptions={{persister: asyncStoragePersister}}>
       <PaperProvider theme={CombinedDarkTheme}>
         <NavigationContainer theme={CombinedDarkTheme}>
           <MyNavigator />
         </NavigationContainer>
       </PaperProvider>
-    </QueryClientProvider>
+    </PersistQueryClientProvider>
   );
 }
 

@@ -1,3 +1,4 @@
+import {useNavigation} from '@react-navigation/native';
 import {useQuery} from '@tanstack/react-query';
 import {isEmpty} from 'lodash';
 import React, {useEffect, useRef, useState} from 'react';
@@ -17,17 +18,18 @@ type Props = {
   navigation: any;
 };
 
-const Airing = ({navigation}: Props) => {
+const AnimeList = ({route, navigation}: Props) => {
   const theme = useTheme();
   const [page, setPage] = useState(1);
   const flatListRef = useRef(null);
   const [searchQuery, setSearchQuery] = useState('');
   const debouncedSearchTerm: string = useDebounce<string>(searchQuery, 300);
 
+  const animeStatus = route.params.animeStatus;
   const {isLoading, isError, error, data, isFetching, isPreviousData} =
     useQuery({
-      queryKey: ['anime', 'airing', debouncedSearchTerm, page],
-      queryFn: () => fetchAnimeList(page, 'airing', debouncedSearchTerm),
+      queryKey: ['anime', animeStatus, debouncedSearchTerm, page],
+      queryFn: () => fetchAnimeList(page, animeStatus, debouncedSearchTerm),
       keepPreviousData: true,
     });
 
@@ -56,11 +58,13 @@ const Airing = ({navigation}: Props) => {
           />
         )}
         <Card.Title
-          title={`${item.title} (${item.year})`}
+          title={`${item.title} ${item.year ? `(${item.year})` : ''}`}
           subtitle={item.score ? `Score: ${item.score}/10` : 'Score: -'}
         />
         <Card.Content>
-          <Text variant="bodySmall">Rating: {item.rating}</Text>
+          <Text variant="bodySmall">
+            {item.rating ? `Rating: ${item.rating}/10` : 'Rating: -'}
+          </Text>
         </Card.Content>
       </Card>
     );
@@ -71,6 +75,10 @@ const Airing = ({navigation}: Props) => {
       flatListRef?.current?.scrollToIndex({index: 0, animated: false});
     }
   }, [page]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [debouncedSearchTerm]);
 
   if (isError) {
     return (
@@ -142,7 +150,7 @@ const Airing = ({navigation}: Props) => {
   );
 };
 
-export default Airing;
+export default AnimeList;
 
 const styles = StyleSheet.create({
   container: {

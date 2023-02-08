@@ -26,6 +26,9 @@ const TabNavigator = () => {
           key={route.name}
           name={route.name}
           component={route.component}
+          initialParams={{
+            animeStatus: route.animeStatus,
+          }}
         />
       ))}
     </Tab.Navigator>

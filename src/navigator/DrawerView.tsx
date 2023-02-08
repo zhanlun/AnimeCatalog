@@ -1,20 +1,33 @@
-import React from 'react';
-import {Drawer} from 'react-native-paper';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {useTheme} from 'react-native-paper';
-import {Alert} from 'react-native';
+import { useAtomValue } from 'jotai/react';
+import React, { useMemo } from 'react';
+import { Drawer, useTheme } from 'react-native-paper';
+import { favoritesAtom } from '../atoms/favorites';
+import { selectedAnimeIdAtom } from '../atoms/selectedAnime';
 
-function DrawerView({ navigation }) {
+function DrawerView({navigation, ...props}) {
   const theme = useTheme();
+
+  const favoriteIdMap = useAtomValue(favoritesAtom);
+  const favoriteAnimeList = useMemo(() => {
+    return Object.entries(favoriteIdMap)
+      .filter(entry => !!entry[1])
+      .map(entry => ({
+        id: entry[0],
+        title: entry[1]?.title ?? '',
+      }));
+  }, [favoriteIdMap]);
+  const selectedAnimeId = useAtomValue(selectedAnimeIdAtom);
 
   return (
     <Drawer.Section title="My Favorites" showDivider={false}>
-      <Drawer.Item label="First Item" onPress={() => {}} />
-      <Drawer.Item
-        label="Second Item long long isekai name asdfsf "
-        active
-        onPress={() => navigation.navigate('Detail')}
-      />
+      {favoriteAnimeList.map(item => (
+        <Drawer.Item
+          key={item.id}
+          label={item.title}
+          active={selectedAnimeId === item.id}
+          onPress={() => navigation.navigate('Detail', {id: item.id})}
+        />
+      ))}
     </Drawer.Section>
   );
 }
