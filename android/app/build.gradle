@@ -117,6 +117,12 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+        release {
+            storeFile file('zhanlun.keystore')
+            storePassword '123456'
+            keyAlias 'zhanlun'
+            keyPassword '123456'
+        }
     }
     buildTypes {
         debug {

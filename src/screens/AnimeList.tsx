@@ -59,7 +59,7 @@ const AnimeList = ({route, navigation}: Props) => {
         />
         <Card.Content>
           <Text variant="bodySmall">
-            {item.rating ? `Rating: ${item.rating}/10` : 'Rating: -'}
+            {item.rating ? `Rating: ${item.rating}` : 'Rating: -'}
           </Text>
         </Card.Content>
       </Card>
@@ -88,6 +88,10 @@ const AnimeList = ({route, navigation}: Props) => {
 
   const isFetchingOrLoading = isLoading || isFetching;
 
+  const buttonStyle = {
+    backgroundColor: theme.colors.background,
+  }
+
   return (
     <View
       style={[styles.container, {backgroundColor: theme.colors.background}]}>
@@ -115,6 +119,9 @@ const AnimeList = ({route, navigation}: Props) => {
           style={styles.flatListContainer}
           data={animeList}
           renderItem={renderItem}
+          ListFooterComponent={
+            <View style={{ height: 80}} />
+          }
         />
       )}
       <SegmentedButtons
@@ -125,12 +132,14 @@ const AnimeList = ({route, navigation}: Props) => {
           {
             value: 'prev',
             label: 'Previous',
+            style: buttonStyle,
             disabled: page === 1 || isFetchingOrLoading,
             onPress: () => setPage(prev => Math.max(prev - 1, 1)),
           },
           {
             value: 'next',
             label: 'Next',
+            style: buttonStyle,
             disabled: !hasNextPage || isFetchingOrLoading,
             onPress: () => setPage(prev => Math.min(prev + 1, lastPage)),
           },
@@ -161,5 +170,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   flatListContainer: {paddingVertical: 15, paddingHorizontal: 15},
-  buttonsContainer: {marginVertical: 15, paddingHorizontal: 15},
+  buttonsContainer: {
+    position: 'absolute',
+    bottom: 0,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    backgroundColor: '#0000007D',
+  },
 });

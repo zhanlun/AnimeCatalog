@@ -15,7 +15,7 @@ const AnimeListEmptySkeleton = () => {
   return (
     <SkeletonPlaceholder
       borderRadius={10}
-      highlightColor={theme.colors.backdrop}
+      highlightColor={theme.colors.surfaceVariant}
       backgroundColor={theme.colors.backdrop}>
       <SkeletonPlaceholder.Item flexDirection="column" alignItems="center">
         <SkeletonPlaceholder.Item {...cardSkeletonProps} />

@@ -55,24 +55,31 @@ const DetailScreen = ({route, navigation}: Props) => {
     <View
       style={[styles.mainContainer, {backgroundColor: theme.colors.surface}]}>
       {imageUrl && <Image source={{uri: imageUrl}} style={styles.image} />}
-      <View style={styles.headerContainer}>
-        <Text variant="headlineSmall">
-          {animeData.title} {animeData.year ? `(${animeData.year})` : ''}
-        </Text>
-        <Text variant="labelLarge" style={{marginTop: 10}}>
-          {animeData.score ? `Score: ${animeData.score}/10` : 'Score: -'}
-        </Text>
-        <View style={{height: 10}} />
-        <Text variant="labelMedium">Rating: {animeData.rating}</Text>
-      </View>
       <ScrollView
         contentContainerStyle={[
           styles.scrollContentContainer,
           {backgroundColor: theme.colors.backdrop},
         ]}>
-        <Text variant="titleMedium">Synopsis</Text>
-        <View style={{height: 10}} />
-        <Text variant="bodyMedium">{animeData?.synopsis || '-'}</Text>
+        <View
+          style={[
+            styles.headerContainer,
+            {backgroundColor: theme.colors.surface},
+          ]}>
+          <Text variant="headlineSmall">
+            {animeData.title} {animeData.year ? `(${animeData.year})` : ''}
+          </Text>
+          <Text variant="labelLarge" style={{marginTop: 10}}>
+            {animeData.score ? `Score: ${animeData.score}/10` : 'Score: -'}
+          </Text>
+          <View style={{height: 10}} />
+          <Text variant="labelMedium">Rating: {animeData.rating ?? '-'}</Text>
+        </View>
+        <View style={{paddingVertical: 10, paddingHorizontal: 15}}>
+          <Text variant="titleMedium">Synopsis</Text>
+          <View style={{height: 10}} />
+          <Text variant="bodyMedium">{animeData?.synopsis || '-'}</Text>
+          <View style={{height: 90}} />
+        </View>
       </ScrollView>
       <View style={styles.buttonContainer}>
         {!isFavorite ? (
@@ -112,11 +119,14 @@ const styles = StyleSheet.create({
   headerContainer: {paddingVertical: 20, paddingHorizontal: 15},
   scrollContentContainer: {
     flexGrow: 1,
-    paddingVertical: 10,
-    paddingHorizontal: 15,
   },
   buttonContainer: {
-    marginHorizontal: 10,
-    marginVertical: 20,
+    position: 'absolute',
+    bottom: 0,
+    paddingVertical: 15,
+    paddingHorizontal: 10,
+    backgroundColor: '#00000099',
+    right: 0,
+    left: 0,
   },
 });
