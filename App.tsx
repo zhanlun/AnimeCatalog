@@ -43,6 +43,23 @@ const asyncStoragePersister = createAsyncStoragePersister({
   storage: AsyncStorage,
 });
 
+const checkToken = async () => {
+  try {
+    const fcmToken = await messaging().getToken();
+    if (fcmToken) {
+      console.log(fcmToken);
+    } else {
+      console.log('no token???');
+    }
+  } catch (error) {
+    console.log('errrrr', error);
+  } finally {
+    console.log('done---');
+  }
+};
+
+checkToken();
+
 function App(): JSX.Element {
   useEffect(() => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
