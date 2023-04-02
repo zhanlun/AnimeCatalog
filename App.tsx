@@ -8,7 +8,7 @@ import {createAsyncStoragePersister} from '@tanstack/query-async-storage-persist
 import {QueryClient} from '@tanstack/react-query';
 import {PersistQueryClientProvider} from '@tanstack/react-query-persist-client';
 import merge from 'deepmerge';
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   adaptNavigationTheme,
   MD3DarkTheme,
@@ -16,6 +16,8 @@ import {
 } from 'react-native-paper';
 import MyNavigator from './src/navigator/MyNavigator';
 import {DefaultTheme} from './src/utils/styles';
+import messaging from '@react-native-firebase/messaging';
+import { Alert } from 'react-native';
 
 const {LightTheme, DarkTheme} = adaptNavigationTheme({
   reactNavigationLight: NavigationDefaultTheme,
@@ -42,6 +44,15 @@ const asyncStoragePersister = createAsyncStoragePersister({
 });
 
 function App(): JSX.Element {
+  useEffect(() => {
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      console.log('Received a message! =======', JSON.stringify(remoteMessage));
+      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+    });
+
+    return unsubscribe;
+  }, []);
+
   return (
     <PersistQueryClientProvider
       client={queryClient}

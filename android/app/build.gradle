@@ -155,6 +155,9 @@ android {
 }
 
 dependencies {
+    implementation platform('com.google.firebase:firebase-bom:31.3.0')
+    implementation 'com.google.firebase:firebase-analytics'
+
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
 
@@ -179,3 +182,4 @@ project.ext.vectoricons = [
 ]
 
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
+apply plugin: 'com.google.gms.google-services' // <- Add this line

@@ -12,6 +12,8 @@
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.17.11",
+    "@react-native-firebase/app": "^17.4.1",
+    "@react-native-firebase/messaging": "^17.4.1",
     "@react-native-masked-view/masked-view": "^0.2.8",
     "@react-navigation/bottom-tabs": "^6.5.4",
     "@react-navigation/drawer": "^6.5.8",
